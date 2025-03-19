@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-title>Aggiungi Libro</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-item>
+        <ion-label position="floating">Titolo</ion-label>
+        <ion-input [(ngModel)]="title"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label position="floating">Autore</ion-label>
+        <ion-input [(ngModel)]="author"></ion-input>
+    </ion-item>
+
+    <ion-button expand="full" (click)="takePhoto()">📸 Scatta Foto</ion-button>
+    <ion-button expand="full" (click)="stopCamera()">📸 Spegni Camera</ion-button>
+    <img *ngIf="coverImage" [src]="coverImage" width="200">
+
+    <!-- <ion-button expand="full" (click)="extractText()">🔍 Estrai Dati</ion-button> -->
+
+    <ion-button expand="full" (click)="addBook()">Aggiungi</ion-button>
+</ion-content>

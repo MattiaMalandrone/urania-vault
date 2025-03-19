@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">urania-vault</string>
+    <string name="title_activity_main">urania-vault</string>
+    <string name="package_name">com.matix.uraniavault</string>
+    <string name="custom_url_scheme">com.matix.uraniavault</string>
+</resources>
