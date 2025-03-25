@@ -24,7 +24,7 @@ export class BookListComponent {
   books$ = this.bookService.books$;
 
   private db = inject(DATABASE_SERVICE_TOKEN)
-  
+
   constructor(private actionSheetCtrl: ActionSheetController) {
     addIcons({ createOutline });
   }

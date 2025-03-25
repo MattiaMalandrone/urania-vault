@@ -6,7 +6,7 @@ export const DATABASE_SERVICE_TOKEN = new InjectionToken<DatabaseService>('Datab
 export abstract class DatabaseService {
     dbInstance: unknown;
     abstract initDatabase(): Promise<void>;
-    abstract getBooks(): Book[];
+    abstract getBooks(searchTerm?: string): Book[];
     abstract insertQuery(book: Book): void;
     abstract updateQuery(book: Book): void;
 }

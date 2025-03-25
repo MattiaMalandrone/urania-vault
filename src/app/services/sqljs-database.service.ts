@@ -28,14 +28,14 @@ export class SqlJsDatabaseService implements DatabaseService {
     if (!this.dbSqlJs$) {
       this.dbSqlJs$ = defer(() =>
         from(initSqlJs({ locateFile: (file) => `assets/${file}` })).pipe(
-          switchMap((SQL: SqlJsStatic) => { 
+          switchMap((SQL: SqlJsStatic) => {
             this.lokiDb = new Loki('booksDB', {
               autoload: true,
               autosave: true,
               autosaveInterval: 5000,
             });
             this.lokiDb.loadDatabase({}, () => { console.log('✅ LokiJS Database Inizializzato con IndexedDB!'); });
-            return of(new SQL.Database()) 
+            return of(new SQL.Database())
           }),
           catchError((error) => {
             console.error("Database initialization failed:", error);
@@ -93,11 +93,16 @@ export class SqlJsDatabaseService implements DatabaseService {
     }).catch(error => {
       console.error("App initialization failed:", error);
       return Promise.reject(error);
-    });   
+    });
   }
 
-  public getBooks(): Book[] {
-    return this.booksCollection.find();
+  public getBooks(searchTerm?: string): Book[] {
+    if(searchTerm) {
+      const regex = new RegExp(searchTerm, "i"); // "i" makes it case-insensitive
+      const filters: LokiQuery<Book & LokiObj> = { $or: [{ title: { $regex: regex } }, { author: { $regex: regex } }, { number: { $regex: regex } }] };
+      return this.booksCollection.find(filters);
+    }
+    return  this.booksCollection.find();
   }
 
   public insertQuery(book: Book): void {
@@ -117,12 +122,12 @@ export class SqlJsDatabaseService implements DatabaseService {
         this.booksCollection.update(existingBook);
         this.lokiDb.saveDatabase();
       }
-      const query = `UPDATE books SET 
-                      title = "${book.title}", 
-                      author = "${book.author}", 
-                      number = ${book.number}, 
-                      status = "${book.status}", 
-                      ext = "${book.ext}" 
+      const query = `UPDATE books SET
+                      title = "${book.title}",
+                      author = "${book.author}",
+                      number = ${book.number},
+                      status = "${book.status}",
+                      ext = "${book.ext}"
                     WHERE id = ${book.id}`;
 
       this.dbInstance!.exec(query);
@@ -131,21 +136,4 @@ export class SqlJsDatabaseService implements DatabaseService {
       console.log(err);
     }
   }
-
-  private mapQueryResultToBooks(result: QueryExecResult[]): Book[] {
-    if (result.length === 0) return [];
-
-    const { columns, values } = result[0];
-
-    return values.map(row => {
-      const book = new Book();
-
-      columns.forEach((column, index) => {
-        if (column in book) 
-          (book as Record<keyof Book, unknown>)[column as keyof Book] = row[index]; 
-      });
-
-      return book;
-    });
-  } 
 }

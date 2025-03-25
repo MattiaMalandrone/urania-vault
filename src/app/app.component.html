@@ -1,8 +1,18 @@
 <ion-app>
     <ion-header>
         <ion-toolbar>
-        <ion-title>Urania Vault</ion-title>
+          <ion-title>Urania Vault</ion-title>
+          <ion-buttons slot="end">
+            <ion-button shape="round" [routerLink]="['/add']">
+              ADD
+            </ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+        <ion-toolbar>
+          <ion-searchbar [debounce]="700" (ionInput)="handleInput($event)"></ion-searchbar>
         </ion-toolbar>
     </ion-header>
-    <ion-router-outlet></ion-router-outlet>
+    <ion-content class="ion-padding">
+      <ion-router-outlet></ion-router-outlet>
+    </ion-content>
 </ion-app>
