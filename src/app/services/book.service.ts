@@ -9,7 +9,8 @@ import { DATABASE_SERVICE_TOKEN } from './database.service';
 })
 export class BookService {
 
-  private db = inject(DATABASE_SERVICE_TOKEN)
+  private db = inject(DATABASE_SERVICE_TOKEN);
+
   private booksSearch = new BehaviorSubject<string>('');
   public booksList$ = this.booksSearch.asObservable()
                           .pipe(
@@ -84,5 +85,12 @@ export class BookService {
 
   searchBooks(searchTerm: string) {
     this.booksSearch.next(searchTerm);
+  }
+
+  getTrama(): string {
+    fetch("https://openlibrary.org/search.json?title=1984")
+      .then(response => response.json())
+      .then(data => console.log(data.docs[0]?.first_sentence));
+    return "";
   }
 }
